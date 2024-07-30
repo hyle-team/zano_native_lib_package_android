@@ -1,0 +1,77 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.android)
+}
+
+android {
+    namespace 'com.dowell.zanowalletlib'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11"
+            }
+        }
+
+        ndk {
+            version "26.2.11394342"
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+
+        sourceSets {
+            main {
+                java.srcDirs = ['src/main/java']
+                jni.srcDirs = ['src/main/jni']
+                jniLibs.srcDirs = ['src/main/jniLibs']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/CMakeLists.txt"
+        }
+    }
+
+    ndkVersion "26.2.11394342"
+}
+
+// Task to generate JNI headers
+task generateJNIHeaders(type: Exec) {
+    doFirst {
+        file("src/main/jni").mkdirs()
+    }
+    commandLine "javac", "-h", "src/main/jni", "src/main/java/com/dowell/zanowalletlib/PlainWalletApi.java"
+}
+
+preBuild.dependsOn generateJNIHeaders
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}
