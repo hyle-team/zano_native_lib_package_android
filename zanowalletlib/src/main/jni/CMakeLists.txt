@@ -28,7 +28,7 @@ add_library(z STATIC IMPORTED)
 add_library(openssl_crypto STATIC IMPORTED)
 add_library(openssl_ssl STATIC IMPORTED)
 
-add_library(boost_atomic STATIC IMPORTED)
+add_library(libboost_atomic STATIC IMPORTED)
 add_library(libboost_chrono STATIC IMPORTED)
 add_library(libboost_date_time STATIC IMPORTED)
 add_library(libboost_filesystem STATIC IMPORTED)
@@ -50,7 +50,7 @@ set_target_properties(z PROPERTIES IMPORTED_LOCATION "${ZANO_NATIVE_LIB_DIR}/lib
 set_target_properties(openssl_crypto PROPERTIES IMPORTED_LOCATION "${OPENSSL_NATIVE_LIB_DIR}/libcrypto.a")
 set_target_properties(openssl_ssl PROPERTIES IMPORTED_LOCATION "${OPENSSL_NATIVE_LIB_DIR}/libssl.a")
 
-set_target_properties(boost_atomic PROPERTIES IMPORTED_LOCATION "${BOOST_NATIVE_LIB_DIR}/libboost_atomic.a")
+set_target_properties(libboost_atomic PROPERTIES IMPORTED_LOCATION "${BOOST_NATIVE_LIB_DIR}/libboost_atomic.a")
 set_target_properties(libboost_chrono PROPERTIES IMPORTED_LOCATION "${BOOST_NATIVE_LIB_DIR}/libboost_chrono.a")
 set_target_properties(libboost_date_time PROPERTIES IMPORTED_LOCATION "${BOOST_NATIVE_LIB_DIR}/libboost_date_time.a")
 set_target_properties(libboost_filesystem PROPERTIES IMPORTED_LOCATION "${BOOST_NATIVE_LIB_DIR}/libboost_filesystem.a")
@@ -75,7 +75,7 @@ target_link_libraries(
         z
         openssl_ssl
         openssl_crypto
-        boost_atomic
+        libboost_atomic
         libboost_chrono
         libboost_date_time
         libboost_filesystem
@@ -87,6 +87,4 @@ target_link_libraries(
         libboost_timer
         libboost_wserialization
         log
-        atomic
-        m
 )
