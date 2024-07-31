@@ -9,10 +9,10 @@ extern "C" {
 #endif
 /*
  * Class:     com_dowell_zanowalletlib_PlainWalletApi
- * Method:    init
+ * Method:    initWithAddress
  * Signature: (Ljava/lang/String;Ljava/lang/String;I)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_dowell_zanowalletlib_PlainWalletApi_init
+JNIEXPORT jstring JNICALL Java_com_dowell_zanowalletlib_PlainWalletApi_initWithAddress
   (JNIEnv *, jobject, jstring, jstring, jint);
 
 /*
