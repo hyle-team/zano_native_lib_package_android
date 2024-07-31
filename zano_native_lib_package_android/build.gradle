@@ -67,6 +67,20 @@ task generateJNIHeaders(type: Exec) {
 
 preBuild.dependsOn generateJNIHeaders
 
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.hyle-team'
+                artifactId = 'zano_native_lib_package_android'
+                version = '1.0.4'
+            }
+        }
+    }
+}
+
 dependencies {
 
     implementation libs.androidx.core.ktx
