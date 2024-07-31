@@ -89,5 +89,4 @@ target_link_libraries(
         log
         atomic
         m
-        pthread
 )
