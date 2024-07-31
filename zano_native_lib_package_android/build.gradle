@@ -9,6 +9,11 @@ android {
     compileSdk 34
 
     defaultConfig {
+        // To avoid build error set minSdk to 30
+        // Error:
+        // ld.lld: error: undefined symbol: pthread_cond_clockwait
+        // Details:
+        // https://github.com/android/ndk/issues/1433
         minSdk 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
