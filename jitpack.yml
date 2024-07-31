@@ -1,8 +1,2 @@
 jdk:
   - openjdk11
-
-before_install:
-  - ./gradlew wrapper --gradle-version 8.7
-
-install:
-  - ./gradlew clean assembleRelease
