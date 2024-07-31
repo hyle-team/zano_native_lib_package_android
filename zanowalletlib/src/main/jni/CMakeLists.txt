@@ -65,6 +65,8 @@ set_target_properties(libboost_wserialization PROPERTIES IMPORTED_LOCATION "${BO
 # Create the shared library for JNI
 add_library(walletapi SHARED PlainWalletApi.cpp)
 
+add_library(random_wrapper STATIC random_wrapper.cpp)
+
 # Link the native libraries
 target_link_libraries(
         walletapi
@@ -89,5 +91,5 @@ target_link_libraries(
         log
         atomic
         m
-        pthread
+        random_wrapper
 )
