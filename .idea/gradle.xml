@@ -10,7 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/zanowalletlib" />
+            <option value="$PROJECT_DIR$/zano_native_lib_package_android" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
