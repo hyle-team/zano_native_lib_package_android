@@ -1,8 +1,8 @@
-prefix=/home/player/zano_native_lib/_install_android
-exec_prefix=/home/player/zano_native_lib/_install_android
-libdir=/home/player/zano_native_lib/_install_android/lib
-sharedlibdir=/home/player/zano_native_lib/_install_android/lib
-includedir=/home/player/zano_native_lib/_install_android/include
+prefix=/Users/roky/projects/Zano/mobile_repo/mobile/zano_native_lib/_install_android
+exec_prefix=/Users/roky/projects/Zano/mobile_repo/mobile/zano_native_lib/_install_android
+libdir=/Users/roky/projects/Zano/mobile_repo/mobile/zano_native_lib/_install_android/lib
+sharedlibdir=/Users/roky/projects/Zano/mobile_repo/mobile/zano_native_lib/_install_android/lib
+includedir=/Users/roky/projects/Zano/mobile_repo/mobile/zano_native_lib/_install_android/include
 
 Name: zlib
 Description: zlib compression library
