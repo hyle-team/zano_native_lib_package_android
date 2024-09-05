@@ -14,7 +14,7 @@ android {
         // ld.lld: error: undefined symbol: pthread_cond_clockwait
         // Details:
         // https://github.com/android/ndk/issues/1433
-        minSdk 30
+        minSdk 23
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
