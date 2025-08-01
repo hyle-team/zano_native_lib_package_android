@@ -4,60 +4,14 @@
 #include "plain_wallet_api.h"
 #include <regex>
 
-std::string sanitizeUtf8(const std::string &input) {
-    std::string result;
-    result.reserve(input.size());
-
-    for (size_t i = 0; i < input.size();) {
-        unsigned char c = input[i];
-
-        // ASCII characters (0-127) are always valid
-        if (c < 0x80) {
-            result += c;
-            i++;
-        }
-            // 2-byte UTF-8 sequence (110xxxxx 10xxxxxx)
-        else if ((c & 0xE0) == 0xC0) {
-            if (i + 1 < input.size() &&
-                    (static_cast<unsigned char>(input[i + 1]) & 0xC0) == 0x80) {
-                result.append(input, i, 2);
-                i += 2;
-            } else {
-                result += '?'; // Replace invalid sequence
-                i++;
-            }
-        }
-            // 3-byte UTF-8 sequence (1110xxxx 10xxxxxx 10xxxxxx)
-        else if ((c & 0xF0) == 0xE0) {
-            if (i + 2 < input.size() &&
-                    (static_cast<unsigned char>(input[i + 1]) & 0xC0) == 0x80 &&
-                    (static_cast<unsigned char>(input[i + 2]) & 0xC0) == 0x80) {
-                result.append(input, i, 3);
-                i += 3;
-            } else {
-                result += '?';
-                i++;
-            }
-        }
-            // 4-byte UTF-8 sequence (11110xxx 10xxxxxx 10xxxxxx 10xxxxxx)
-        else if ((c & 0xF8) == 0xF0) {
-            if (i + 3 < input.size() &&
-                    (static_cast<unsigned char>(input[i + 1]) & 0xC0) == 0x80 &&
-                    (static_cast<unsigned char>(input[i + 2]) & 0xC0) == 0x80 &&
-                    (static_cast<unsigned char>(input[i + 3]) & 0xC0) == 0x80) {
-                result.append(input, i, 4);
-                i += 4;
-            } else {
-                result += '?';
-                i++;
-            }
-        } else {
-            result += '?'; // Invalid start byte
-            i++;
-        }
+std::string cleanJsonComments(const std::string &json) {
+    try {
+        std::regex commentRegex(R"("comment"\s*:\s*"[^"]*")");
+        return std::regex_replace(json, commentRegex, R"("comment": "")");
+    } catch (const std::exception &e) {
+        // If regex fails, fall back to UTF-8 sanitization
+        return json;
     }
-
-    return result;
 }
 
 extern "C" JNIEXPORT jstring JNICALL
@@ -245,7 +199,7 @@ Java_com_dowell_zanowalletlib_PlainWalletApi_asyncCall(JNIEnv *env, jobject, jst
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_dowell_zanowalletlib_PlainWalletApi_tryPullResult(JNIEnv *env, jobject, jlong instance_id) {
     std::string result = plain_wallet::try_pull_result(instance_id);
-    return env->NewStringUTF(sanitizeUtf8(result).c_str());
+    return env->NewStringUTF(cleanJsonComments(result).c_str());
 }
 
 extern "C" JNIEXPORT jstring JNICALL
