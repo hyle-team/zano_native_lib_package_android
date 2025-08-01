@@ -4,16 +4,6 @@
 #include "plain_wallet_api.h"
 #include <regex>
 
-std::string cleanJsonComments(const std::string &json) {
-    try {
-        std::regex commentRegex(R"("comment"\s*:\s*"[^"]*")");
-        return std::regex_replace(json, commentRegex, R"("comment": "")");
-    } catch (const std::exception &e) {
-        // If regex fails, fall back to UTF-8 sanitization
-        return json;
-    }
-}
-
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_dowell_zanowalletlib_PlainWalletApi_initWithAddress(JNIEnv *env, jobject, jstring address, jstring working_dir, jint log_level) {
     const char* address_cstr = env->GetStringUTFChars(address, 0);
@@ -198,8 +188,31 @@ Java_com_dowell_zanowalletlib_PlainWalletApi_asyncCall(JNIEnv *env, jobject, jst
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_dowell_zanowalletlib_PlainWalletApi_tryPullResult(JNIEnv *env, jobject, jlong instance_id) {
-    std::string result = plain_wallet::try_pull_result(instance_id);
-    return env->NewStringUTF(cleanJsonComments(result).c_str());
+    try {
+        std::string result = plain_wallet::try_pull_result(instance_id);
+
+        // Debug: Check if result is empty
+        if (result.empty()) {
+            return env->NewStringUTF("{}");
+        }
+
+        // Try the most aggressive cleaning
+        std::string cleaned;
+        for (char c: result) {
+            if (c >= 32 && c <= 126) { // Only printable ASCII
+                cleaned += c;
+            } else if (c == '\n' || c == '\r' || c == '\t') {
+                cleaned += c; // Keep basic whitespace
+            }
+            // Skip everything else (including invalid UTF-8)
+        }
+
+        return env->NewStringUTF(cleaned.c_str());
+
+    } catch (...) {
+        // If anything fails, return empty JSON
+        return env->NewStringUTF("{}");
+    }
 }
 
 extern "C" JNIEXPORT jstring JNICALL
