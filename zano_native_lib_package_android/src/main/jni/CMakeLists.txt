@@ -24,6 +24,9 @@ add_library(crypto STATIC IMPORTED)
 add_library(currency_core STATIC IMPORTED)
 add_library(wallet STATIC IMPORTED)
 add_library(z STATIC IMPORTED)
+# Boost.Stacktrace libbacktrace backend: libwallet.a is built with
+# BOOST_STACKTRACE_USE_BACKTRACE and needs backtrace_create_state/pcinfo/syminfo.
+add_library(backtrace STATIC IMPORTED)
 
 add_library(openssl_crypto STATIC IMPORTED)
 add_library(openssl_ssl STATIC IMPORTED)
@@ -46,6 +49,7 @@ set_target_properties(crypto PROPERTIES IMPORTED_LOCATION "${ZANO_NATIVE_LIB_DIR
 set_target_properties(currency_core PROPERTIES IMPORTED_LOCATION "${ZANO_NATIVE_LIB_DIR}/libcurrency_core.a")
 set_target_properties(wallet PROPERTIES IMPORTED_LOCATION "${ZANO_NATIVE_LIB_DIR}/libwallet.a")
 set_target_properties(z PROPERTIES IMPORTED_LOCATION "${ZANO_NATIVE_LIB_DIR}/libz.a")
+set_target_properties(backtrace PROPERTIES IMPORTED_LOCATION "${ZANO_NATIVE_LIB_DIR}/libbacktrace.a")
 
 set_target_properties(openssl_crypto PROPERTIES IMPORTED_LOCATION "${OPENSSL_NATIVE_LIB_DIR}/libcrypto.a")
 set_target_properties(openssl_ssl PROPERTIES IMPORTED_LOCATION "${OPENSSL_NATIVE_LIB_DIR}/libssl.a")
@@ -86,5 +90,7 @@ target_link_libraries(
         libboost_thread
         libboost_timer
         libboost_wserialization
+        backtrace
+        dl
         log
 )
